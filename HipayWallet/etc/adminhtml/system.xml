@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magenest. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+            <group id="magenest_hipaywallet" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>HipayWallet</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this Solution</comment>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Title</label>
+                    <comment>Payment method title displayed on Checkout page</comment>
+                </field>
+                <field id="ws_login" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API Webservice Login</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment><![CDATA[
+                        Your API Webservice Login.
+                        <br>
+                        To get API Web Service. Log in to your Hipay account. Click on Merchant Tool Kit / API.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="ws_password" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>API Webservice Password</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <comment><![CDATA[
+                        Your API Webservice Password.
+                        <br>
+                        To get API Web Service. Log in to your Hipay account. Click on Merchant Tool Kit / API.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="test" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Account Mode</label>
+                    <source_model>Magenest\HipayWallet\Model\System\AccountMode</source_model>
+                    <comment>
+                        <![CDATA[
+                        If set to 'Test' the module will use the Hipay test system otherwise it's using the live system.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="website_id" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Merchant Site Id</label>
+                    <comment><![CDATA[
+                        ID of the website created on merchants account.
+                        <br>
+                        You can register Website Id in your Hipay account.
+                        <br>
+                        HiPay wallet integration -> Register a new website
+                        ]]>
+                    </comment>
+                </field>
+                <field id="category_id" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Order Category</label>
+                    <source_model>Magenest\HipayWallet\Model\System\OrderCategory</source_model>
+                    <comment>
+                        <![CDATA[
+                        List of your categories (based on your selected business category on Hipay).
+                        <br>
+                        Please enter the Merchant site id and save config to Select the Category
+                        ]]>
+                    </comment>
+                </field>
+                <field id="rating" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Age Classification</label>
+                    <source_model>Magenest\HipayWallet\Model\System\OrderRating</source_model>
+                    <comment>Default Age category of your order.</comment>
+                </field>
+                <field id="locale" translate="label" sortOrder="90" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Locale code</label>
+                    <source_model>Magenest\HipayWallet\Model\System\Locale</source_model>
+                    <comment>
+                        <![CDATA[
+                        It may be used for sending confirmation emails to your customer or for displaying payment pages.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="email_callback" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Notification E-Mail</label>
+                    <comment>Email used by HiPay Wallet to post operation notifications</comment>
+                </field>
+                <field id="url_logo" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Url Logo</label>
+                    <comment>
+                        <![CDATA[
+                        This URL is where the logo you want to appear on your payment page is located.
+                        <br>
+                        Important: <strong>HTTPS</strong> protocol is required.
+                        <br>
+                        This logo must not exceed 100x100 pixels in size.
+                        ]]>
+                    </comment>
+                </field>
+                <field id="payment_action" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Payment Action</label>
+                    <source_model>Magenest\HipayWallet\Model\Source\PaymentAction</source_model>
+                    <comment>
+                        <![CDATA[
+                        Indicates how you want to process the payment.
+                        <ol>
+                            <li>
+                                <strong>Authorize only</strong>: indicates this transaction is sent
+                                for authorization only. The
+                                transaction will not be sent for
+                                settlement until the Merchant
+                                submits the transaction for capture
+                                manually.
+                            </li>
+                            <li>
+                                <strong>Authorize and Capture</strong>: indicates transaction is sent for
+                                authorization, and if approved, is
+                                automatically submitted for
+                                capture
+                            </li>
+                        </ol>
+                        ]]>
+                    </comment>
+                </field>
+                <field id="refund_action" translate="label" type="select" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Refund Action</label>
+                    <source_model>Magenest\HipayWallet\Model\Source\RefundAction</source_model>
+                    <comment>
+                        <![CDATA[
+                        <ol>
+                            <li>
+                                <strong>Refund on customers’ HiPay Wallet account</strong>:
+                                A request instructing the payment
+                                gateway to refund a captured
+                                transaction on HiPay Wallet customers’
+                                account.
+                            </li>
+                            <li>
+                                <strong>Refund on credit card</strong>:
+                                A request instructing the payment
+                                gateway to refund a previously credit
+                                card captured transaction.
+                            </li>
+                        </ol>
+                        ]]>
+                    </comment>
+                </field>
+                <field id="order_status" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>New Order Status</label>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
+                </field>
+                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="150" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Payment from Applicable Countries</label>
+                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="160" showInDefault="1"
+                       showInWebsite="1" showInStore="0">
+                    <label>Payment from Specific Countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                </field>
+                <field id="logging" translate="label" sortOrder="110" type="select" showInDefault="170" showInWebsite="1" showInStore="0">
+                    <label>Enable Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="180" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sort Order</label>
+                    <frontend_class>validate-number</frontend_class>
+                </field>
+                <field id="instructions" translate="label" type="textarea" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Instructions</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

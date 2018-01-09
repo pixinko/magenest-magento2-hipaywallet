@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="Magenest\HipayWallet\Model\ConfigProvider" type="Magento\Payment\Model\CcGenericConfigProvider">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="magenest_hipaywallet" xsi:type="const">Magenest\HipayWallet\Model\HipayWalletPayment::CODE</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="magenest_hipaywallet_config_provider" xsi:type="object">Magenest\HipayWallet\Model\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="MagenestHipayWalletIframeCcConfigProvider" type="Magento\Payment\Model\IframeConfigProvider">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magenest\HipayWallet\Model\HipayWalletPayment::CODE</argument>
+        </arguments>
+    </virtualType>
+</config>

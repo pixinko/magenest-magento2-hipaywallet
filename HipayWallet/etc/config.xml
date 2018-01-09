@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <payment>
+            <magenest_hipaywallet>
+                <active>1</active>
+                <title>HiPay Wallet Credit Card Payment</title>
+                <locale>en_GB</locale>
+                <order_status>processing</order_status>
+                <payment_action>authorize</payment_action>
+                <test>1</test>
+                <cctypes>AE,VI,MC,DI,JCB</cctypes>
+                <allowspecific>0</allowspecific>
+                <model>Magenest\HipayWallet\Model\HipayWalletPayment</model>
+            </magenest_hipaywallet>
+        </payment>
+    </default>
+</config>

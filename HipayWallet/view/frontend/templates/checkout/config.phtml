@@ -1,0 +1,22 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: hiennq
+ * Date: 12/21/16
+ * Time: 13:07
+ */
+
+    /** @var \Magenest\HipayWallet\Block\Checkout\Config $block */
+    $controllerCreateUrl = $block->getUrl('hipaywallet/checkout/redirect');
+    $paymentInstructions = $block->getConfig()->getPaymentInstructions();
+?>
+
+<div id="test_div">
+
+</div>
+
+<script>
+    window.hipay = {};
+    window.hipay.createUrl = '<?php echo $controllerCreateUrl; ?>';
+    window.hipay.instructions = '<?php echo $paymentInstructions; ?>'
+</script>
