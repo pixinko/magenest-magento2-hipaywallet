@@ -33,13 +33,13 @@ class Redirect extends Checkout
                     return $result->setData([
                         'success' => false,
                         'error' => true,
-                        'message' => _('Payment error, please try again')
+                        'message' => __('Payment error, please try again')
                     ]);
                 }
             } catch (\Exception $e) {
                 return $result->setData([
                     'error' => true,
-                    'message' => _('Payment exception')
+                    'message' => __('Payment exception')
                 ]);
             }
         }
