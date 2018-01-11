@@ -36,6 +36,10 @@ define(
                 return $form.validation() && $form.validation('isValid');
             },
 
+            getImageUrl: function() {
+                return window.hipayIcon;
+            },
+
             afterPlaceOrder: function () {
                 var self = this;
                 var payUrl;
