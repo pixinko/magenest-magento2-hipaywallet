@@ -21,6 +21,7 @@ class Cancel extends Checkout
             //$this->fixStock();
 
             $this->checkoutSession->restoreQuote();
+            $this->fixInStock();
             $this->_redirect('checkout/cart');
         }
     }

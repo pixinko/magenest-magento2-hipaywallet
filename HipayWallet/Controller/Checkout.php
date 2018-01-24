@@ -28,6 +28,8 @@ abstract class Checkout extends \Magento\Framework\App\Action\Action
     protected $paymentConfig;
     protected $logger;
     protected $orderManagement;
+    
+    protected $productsToFix;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -96,8 +98,9 @@ abstract class Checkout extends \Magento\Framework\App\Action\Action
                 // out of stock even if it was in stock. Prevent such an issue.
                 // Fix: https://github.com/magento/magento2/issues/8624
                 $isInStock = $stockItem->getIsInStock();
-                
-                $productsToFix[] = array($product->getId() => true);
+                if ($isInStock) {
+                    $this->productsToFix[] = $product->getId();
+                }
                 
                 if ($isInStock) {
                     $this->logger->debug($item->getProduct()->getName() . ' is in stock');
@@ -105,8 +108,8 @@ abstract class Checkout extends \Magento\Framework\App\Action\Action
                     $this->logger->debug($item->getProduct()->getName() . ' is NOT in stock');
                 }
 
-                $stockItem->setQty($stockItem->getQty() - (2 * $item->getQtyOrdered()));
-
+                $stockItem->setQty($stockItem->getQty() - ($item->getQtyOrdered()));
+/*
                 if ($stockItem->setIsInStock($isInStock)) {
                     $this->logger->debug('Set In Stock debug: TRUE');
                 } else {
@@ -122,12 +125,12 @@ abstract class Checkout extends \Magento\Framework\App\Action\Action
                 $this->productRepository->save($product);
                 // If $this->orderManagement->cancel($orderId); is placed
                 // before, the save() statement is needed.
-                //$stockItem->save();
+                //$stockItem->save();*/
                 
                 $this->logger->debug('Product quantity after : ' . $stockItem->getQty());
             }
             $this->orderManagement->cancel($orderId);
-            
+            /*
             foreach($productsToFix as $productId => $productInStock) {
                 
                 $product = $this->productRepository->getById($productId);
@@ -138,10 +141,28 @@ abstract class Checkout extends \Magento\Framework\App\Action\Action
                     $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
                 }
                 $this->productRepository->save($product);
-            }
+            }*/
             
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
+        }
+    }
+    
+    protected function fixInStock() {
+        foreach($this->productsToFix as $productId) {
+            $stockItem = $this->stockRegistry->getStockItem($productId);
+            $this->logger->debug('Treating : ' . $productId . ' (qty: ' . $stockItem->getQty() . ')');
+             //    $this->logger->debug('Treating : ' . $productId);
+            
+       //     $stockItem->setIsInStock(true);
+            //$stockItem->save();
+            
+            // Calling the following lines and the stock is not at 5/10, but 2/0.
+            /*
+            $product = $this->productRepository->getById($productId);
+            $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+            $this->productRepository->save($product);
+            */
         }
     }
 }
