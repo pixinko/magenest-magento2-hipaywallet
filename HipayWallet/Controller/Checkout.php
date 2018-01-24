@@ -79,90 +79,18 @@ abstract class Checkout extends \Magento\Framework\App\Action\Action
     {
         try {
             $orderId = $this->checkoutSession->getLastRealOrder()->getId();
-            
             $order = $this->checkoutSession->getLastRealOrder();
-            $productsToFix = array();
+
             foreach ($order->getAllItems() as $item) {
-            
                 $product = $item->getProduct();
-
-                $this->logger->debug('Product name : ' .
-                    $item->getProduct()->getName());
-
                 $stockItem = $this->stockRegistry->getStockItem($product->getId());
-                $this->logger->debug('Product quantity before : ' . $stockItem->getQty());
-                
-                $this->logger->debug('Product quantity ordered : ' . $item->getQtyOrdered());
-                
-                // Decreasing two times the stock will lead the product to be
-                // out of stock even if it was in stock. Prevent such an issue.
-                // Fix: https://github.com/magento/magento2/issues/8624
-                $isInStock = $stockItem->getIsInStock();
-                if ($isInStock) {
-                    $this->productsToFix[] = $product->getId();
-                }
-                
-                if ($isInStock) {
-                    $this->logger->debug($item->getProduct()->getName() . ' is in stock');
-                } else {
-                    $this->logger->debug($item->getProduct()->getName() . ' is NOT in stock');
-                }
-
-                $stockItem->setQty($stockItem->getQty() - ($item->getQtyOrdered()));
-/*
-                if ($stockItem->setIsInStock($isInStock)) {
-                    $this->logger->debug('Set In Stock debug: TRUE');
-                } else {
-                    $this->logger->debug('Set In Stock debug: FALSE');
-                }
-                $product = $this->productRepository->getById($product->getId());
-                $returnValue = $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-                if ($returnValue) {
-                    $this->logger->debug('setStatus return value true');
-                } else {
-                    $this->logger->debug('setStatus return value false');
-                }
-                $this->productRepository->save($product);
-                // If $this->orderManagement->cancel($orderId); is placed
-                // before, the save() statement is needed.
-                //$stockItem->save();*/
-                
-                $this->logger->debug('Product quantity after : ' . $stockItem->getQty());
+                $stockItem->setQty($stockItem->getQty() - $item->getQtyOrdered());
             }
+
             $this->orderManagement->cancel($orderId);
-            /*
-            foreach($productsToFix as $productId => $productInStock) {
-                
-                $product = $this->productRepository->getById($productId);
-                
-                if ($productInStock) {
-                    $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-                } else {
-                    $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
-                }
-                $this->productRepository->save($product);
-            }*/
             
         } catch (\Exception $e) {
             $this->logger->debug($e->getMessage());
-        }
-    }
-    
-    protected function fixInStock() {
-        foreach($this->productsToFix as $productId) {
-            $stockItem = $this->stockRegistry->getStockItem($productId);
-            $this->logger->debug('Treating : ' . $productId . ' (qty: ' . $stockItem->getQty() . ')');
-             //    $this->logger->debug('Treating : ' . $productId);
-            
-       //     $stockItem->setIsInStock(true);
-            //$stockItem->save();
-            
-            // Calling the following lines and the stock is not at 5/10, but 2/0.
-            /*
-            $product = $this->productRepository->getById($productId);
-            $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-            $this->productRepository->save($product);
-            */
         }
     }
 }

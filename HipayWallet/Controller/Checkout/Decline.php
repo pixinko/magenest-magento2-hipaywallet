@@ -17,7 +17,7 @@ class Decline extends Checkout
     {
         if ($this->checkToken()) {
             $this->messageManager->addErrorMessage(__("Your order has been canceled because payment decline."));
-            //$this->cancelOrder();
+
             $this->checkoutSession->restoreQuote();
             $this->_redirect('checkout/cart');
         }

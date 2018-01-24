@@ -18,10 +18,8 @@ class Cancel extends Checkout
         if ($this->checkToken()) {
             $this->messageManager->addErrorMessage(__("Your order has been canceled because you have canceled the payment process."));
             $this->cancelOrder();
-            //$this->fixStock();
 
             $this->checkoutSession->restoreQuote();
-            $this->fixInStock();
             $this->_redirect('checkout/cart');
         }
     }
